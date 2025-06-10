@@ -3,10 +3,7 @@
 @use "../../styles/partials/mixins" as *;
 @use "../../styles/partials/variables" as *;
 
-.new-item-section {
-    align-items: center;
-}
-
-#new-item {
-    height: auto;
+.done {
+    text-decoration: line-through;
+    color: #ada9a9;
 }

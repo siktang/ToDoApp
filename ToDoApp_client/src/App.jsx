@@ -2,8 +2,7 @@ import { useState } from 'react';
 import './App.scss';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import TaskList from './components/TaskList/TaskList';
-import NewItem from './components/NewItem/NewItem';
+import TodoList from './components/ToDoList/ToDoList';
 
 function App() {
   
@@ -11,8 +10,7 @@ function App() {
   return (
     <>
       <Header />
-      <NewItem />
-      <TaskList />
+      <TodoList />
       <Footer />
     </>
   )
