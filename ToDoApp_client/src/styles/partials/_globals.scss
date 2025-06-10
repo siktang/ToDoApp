@@ -9,6 +9,15 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+html {
+    color: $primary-color-purple;
+}
+
 .divider {
     border-bottom: 2px solid #E6E6E6;
+    margin: 1rem;
+}
+
+.section {
+    border: 2px solid #230c5a;
 }
