@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import TodoList from "../../components/TodoList/TodoList";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/"; 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; 
 
 export default function HomePage() {
 
