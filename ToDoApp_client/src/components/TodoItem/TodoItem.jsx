@@ -1,33 +1,80 @@
 import "./TodoItem.scss";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'; 
 
-export default function TodoItem({ todo, isEditing, editTask, setEditTask, editDueDate, setEditDueDate, onDelete, onEdit, onSave, onCancel, onToggleComplete }) {
+export default function TodoItem({ todo, onDelete}) {
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [editText, setEditText] = useState('');
+    const [editDueDate, setEditDueDate] = useState('');
+    const [editComplete, setEditComplete] = useState(todo.completed);
+    
+    const handleEdit = () => {
+        setIsEditing(true);
+        setEditText(todo.text);
+        setEditDueDate(todo.dueDate || '');
+    };
+    
+    const handleSave = async () => {
+        const editTextTrimmed = editText.trim();
+
+        if (!editTextTrimmed) 
+            return;
+
+        try {
+            let res = await axios.put(`${API_URL}/todos/${todo.id}`, { ...todo, text: editTextTrimmed, dueDate: editDueDate });
+            
+            resetStates();  
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleCancel = () => {
+        resetStates();
+    };
+
+    const resetStates = () => {
+        setIsEditing(false);
+        setEditText('');
+        setEditDueDate('');
+        setEditComplete(todo.completed);
+    };
+
+    const toggleComplete = async (completed) => {
+        try {
+            let res = await axios.put(`${API_URL}/todos/${todo.id}`, { ...todo, completed: completed });
+
+            setEditComplete(completed);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return(
-        <li className="todo-item">
+        <div className="todo-item">
             <input
                 type="checkbox"
-                checked={todo.completed}
-                onChange={() => onToggleComplete(todo.id)}
+                checked={editComplete}
+                onChange={e => toggleComplete(e.target.checked)}
             />
 
             {isEditing ? (
                 <>
                     <input
                         type="text"
-                        value={editTask}
-                        onChange={e => setEditTask(e.target.value)}
+                        value={editText}
+                        onChange={e => setEditText(e.target.value)}
                     />
                     <input
                         type="date"
                         value={editDueDate}
                         onChange={e => setEditDueDate(e.target.value)}
                     />
-                    <button onClick={() => onSave(todo.id)}>Save</button>
-                    <button onClick={() => onCancel}>Cancel</button>
+                    <button onClick={handleSave} className="button button__save">Save</button>
+                    <button onClick={handleCancel} className="button button__cancel">Cancel</button>
                 </>
             ) : (
                 <>
@@ -36,11 +83,11 @@ export default function TodoItem({ todo, isEditing, editTask, setEditTask, editD
                     >
                         {todo.text} (Due: {todo.dueDate || 'N/A'})
                     </span>
-                    <button onClick={() => onEdit(todo)}>Edit</button>
-                    <button onClick={() => onDelete(todo.id)}>Delete</button>
+                    <button onClick={handleEdit} className="button button__edit">Edit</button>
+                    <button onClick={() => onDelete(todo.id)} className="button button__delete">Delete</button>
                 </>
             )}
 
-        </li>
+        </div>
     )
 }

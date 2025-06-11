@@ -25,7 +25,7 @@ export default function NewItem() {
     };
 
     return (
-        <div className="new-item-section">
+        <section className="new-item">
             <label htmlFor="new-item"> New Task: </label>
             <input 
                 id="new-item" 
@@ -34,14 +34,15 @@ export default function NewItem() {
                 value={newTask}
                 onChange={e => setNewTask(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && handleAdd()}
+                required
             />
             <input
                 type="date"
                 value={newDueDate}
                 onChange={e => setNewDueDate(e.target.value)}
             />
-            <button onClick={handleAdd}>Add</button>
-        </div>
+            <button onClick={handleAdd} className="button button__add">Add</button>
+        </section>
     )
 }
     
