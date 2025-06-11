@@ -4,23 +4,23 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/"; 
 
-export default function NewItem() {
+export default function NewItem({ todos, setTodos }) {
 
-    const [newTask, setNewTask] = useState("");
+    const [newText, setNewText] = useState("");
     const [newDueDate, setNewDueDate] = useState('');
-    const [todos, setTodos] = useState([]);
 
     const handleAdd = async () => {
-        if (!newTask.trim()) 
+        if (!newText.trim()) 
             return;
 
         try {
-            let res = await axios.post(`${API_URL}/todos`, { text: newTask.trim(), dueDate: newDueDate });
+            let res = await axios.post(`${API_URL}/todos`, { text: newText.trim(), dueDate: newDueDate });            
             setTodos([...todos, res.data]);
-            setNewTask("");
+            
+            setNewText("");
             setNewDueDate("");           
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -31,10 +31,9 @@ export default function NewItem() {
                 id="new-item" 
                 type="text" 
                 placeholder="Add a new task here" 
-                value={newTask}
-                onChange={e => setNewTask(e.target.value)}
+                value={newText}
+                onChange={e => setNewText(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && handleAdd()}
-                required
             />
             <input
                 type="date"

@@ -10,8 +10,8 @@ let todos = [];
 router.get('/', (req, res) => {
     try {
         return res.status(200).json(todos);
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.log(error);
 
         res.status(500).json({ message: "Failed to retrieve todo list" });
     }
@@ -23,7 +23,7 @@ router.post('/', (req, res) => {
 
     // make sure none of those fields the user sent was empty
     if (!text.trim()) {
-        return res.status(400).json({ message: "Please enter the required field(s)" });
+        return res.status(400).json({ message: "Task description is required" });
     }
 
     try {
@@ -38,7 +38,7 @@ router.post('/', (req, res) => {
         todos.push(newTodo);
         return res.status(201).json(newTodo);
     } catch (error) {
-        console.error(error);
+        console.log(error);
 
         return res.status(500).json({ message: "Failed to add task" });
     }
@@ -51,12 +51,12 @@ router.put('/:id', (req, res) => {
   
   const { text, dueDate, completed } = req.body;
   if (!text.trim()) {
-    return res.status(400).json({ message: "Text cannot be empty" });
+    return res.status(400).json({ message: "Task description is required" });
   }
 
   const todo = todos.find(t => t.id === id);
   if (!todo) 
-    return res.status(404).json({ message: 'Todo not found' });
+    return res.status(404).json({ message: "Task not found" });
 
   try {
     todo.text = text.trim();
@@ -65,7 +65,7 @@ router.put('/:id', (req, res) => {
 
     return res.status(201).json(todo);
   } catch (error) {
-      console.error(error);
+      console.log(error);
 
       return res.status(500).json({ message: "Failed to update task" });
   }
@@ -77,14 +77,14 @@ router.delete('/:id', (req, res) => {
   
   const todo = todos.find(t => t.id === id);
   if (!todo) 
-    return res.status(404).json({ message: 'Todo not found' });
+    return res.status(404).json({ message: "Task not found" });
 
   try {
     todos = todos.filter(t => t.id !== id);
 
     return res.status(204).send();
   } catch (error) {
-      console.error(error);
+      console.log(error);
       
       return res.status(500).json({ message: "Failed to delete task" });
   }

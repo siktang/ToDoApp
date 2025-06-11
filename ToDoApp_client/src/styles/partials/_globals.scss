@@ -40,7 +40,7 @@ html {
     }
 
     &__save {
-        background-color: rgba(40, 34, 134, 0.766);
+        background-color: $primary-color-purple;
     }
 
     &__cancel {
@@ -50,4 +50,6 @@ html {
     &__add {
         background-color: $primary-color-purple;
     }
+
+   
 }

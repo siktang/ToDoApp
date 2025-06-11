@@ -4,17 +4,25 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'; 
 
-export default function TodoItem({ todo, onDelete}) {
+export default function TodoItem({ todo, todos, setTodos }) {
 
     const [isEditing, setIsEditing] = useState(false);
-    const [editText, setEditText] = useState('');
-    const [editDueDate, setEditDueDate] = useState('');
-    const [editComplete, setEditComplete] = useState(todo.completed);
+    const [editText, setEditText] = useState("");
+    const [editDueDate, setEditDueDate] = useState("");
+
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`${API_URL}/todos/${todo.id}`);
+            setTodos(todos.filter(t => t.id !== todo.id));           
+        } catch (error) {
+            console.log(error);
+        }
+    };
     
     const handleEdit = () => {
         setIsEditing(true);
         setEditText(todo.text);
-        setEditDueDate(todo.dueDate || '');
+        setEditDueDate(todo.dueDate || "");
     };
     
     const handleSave = async () => {
@@ -24,32 +32,26 @@ export default function TodoItem({ todo, onDelete}) {
             return;
 
         try {
-            let res = await axios.put(`${API_URL}/todos/${todo.id}`, { ...todo, text: editTextTrimmed, dueDate: editDueDate });
-            
-            resetStates();  
+            let res = await axios.put(`${API_URL}/todos/${todo.id}`, { ...todo, text: editTextTrimmed, dueDate: editDueDate });            
+            setTodos(todos.map(t => t.id === todo.id ? res.data : t)); 
+
+            setIsEditing(false);
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
     const handleCancel = () => {
-        resetStates();
-    };
-
-    const resetStates = () => {
         setIsEditing(false);
-        setEditText('');
-        setEditDueDate('');
-        setEditComplete(todo.completed);
     };
 
     const toggleComplete = async (completed) => {
         try {
             let res = await axios.put(`${API_URL}/todos/${todo.id}`, { ...todo, completed: completed });
+            setTodos(todos.map(t => t.id === todo.id ? res.data : t)); 
 
-            setEditComplete(completed);
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -57,7 +59,7 @@ export default function TodoItem({ todo, onDelete}) {
         <div className="todo-item">
             <input
                 type="checkbox"
-                checked={editComplete}
+                checked={todo.completed}
                 onChange={e => toggleComplete(e.target.checked)}
             />
 
@@ -79,12 +81,12 @@ export default function TodoItem({ todo, onDelete}) {
             ) : (
                 <>
                     <span
-                        className={`task-text ${todo.completed ? 'done' : ''}`}
+                        className={`task-text ${todo.completed ? "done" : ""}`}
                     >
-                        {todo.text} (Due: {todo.dueDate || 'N/A'})
+                        {todo.text} (Due: {todo.dueDate || "N/A"})
                     </span>
                     <button onClick={handleEdit} className="button button__edit">Edit</button>
-                    <button onClick={() => onDelete(todo.id)} className="button button__delete">Delete</button>
+                    <button onClick={handleDelete} className="button button__delete">Delete</button>
                 </>
             )}
 
