@@ -8,18 +8,13 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/";
 export default function TodoList() {
     
     const [todos, setTodos] = useState([]);
-    const [newTask, setNewTask] = useState("");
-    const [newDueDate, setNewDueDate] = useState('');
     const [editId, setEditId] = useState('');
     const [editTask, setEditTask] = useState('');
     const [editDueDate, setEditDueDate] = useState('');
-    // const [isSubmitting, setIsSubmitting] = useState(false);
-    // const [submitClicked, setSubmitClicked] = useState(false);
-    // const [apiError, setApiError] = useState(null);
 
     useEffect(() => {
         getTodos();
-    }, []);
+    }, [todos]);
 
     const getTodos = async () => {
         try {
@@ -30,20 +25,6 @@ export default function TodoList() {
             console.error(error);
         }
     }
-
-    const handleAdd = async () => {
-        if (!newTask.trim()) 
-            return;
-
-        try {
-            let res = await axios.post(`${API_URL}/todos`, { text: newTask.trim(), dueDate: newDueDate });
-            setTodos([...todos, res.data]);
-            setNewTask("");
-            setNewDueDate("");           
-        } catch (error) {
-            console.error(error);
-        }
-    };
 
     const handleDelete = async (id) => {
         try {
@@ -94,45 +75,25 @@ export default function TodoList() {
 
 
     return(
-        <>
-            <div className="new-item-section">
-                <label htmlFor="new-item"> New Task: </label>
-                <input 
-                    id="new-item" 
-                    type="text" 
-                    placeholder="Add a new task here" 
-                    value={newTask}
-                    onChange={e => setNewTask(e.target.value)}
-                    onKeyDown={e => e.key === "Enter" && handleAdd()}
+        <div className="to-do-list">
+            <ul>
+                {todos.map(todo => (
+                <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    isEditing={editId === todo.id}
+                    editTask={editTask}
+                    setEditTask={setEditTask}
+                    editDueDate={editDueDate}
+                    setEditDueDate={setEditDueDate}
+                    onDelete={handleDelete}
+                    onEdit={handleEdit}
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                    onToggleComplete={toggleComplete}
                 />
-                <input
-                    type="date"
-                    value={newDueDate}
-                    onChange={e => setNewDueDate(e.target.value)}
-                />
-                <button onClick={handleAdd}>Add</button>
-            </div>
-            
-            <div className="to-do-list">
-                <ul>
-                    {todos.map(todo => (
-                    <TodoItem
-                        key={todo.id}
-                        todo={todo}
-                        isEditing={editId === todo.id}
-                        editTask={editTask}
-                        setEditTask={setEditTask}
-                        editDueDate={editDueDate}
-                        setEditDueDate={setEditDueDate}
-                        onDelete={handleDelete}
-                        onEdit={handleEdit}
-                        onSave={handleSave}
-                        onCancel={handleCancel}
-                        onToggleComplete={toggleComplete}
-                    />
-                    ))}
-                </ul>
-            </div>
-        </>
+                ))}
+            </ul>
+        </div>
     )
 }
