@@ -7,7 +7,6 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/";
 
 export default function TodoList() {
     
-
     const [todos, setTodos] = useState([]);
     const [newTask, setNewTask] = useState("");
     const [newDueDate, setNewDueDate] = useState('');
@@ -55,20 +54,44 @@ export default function TodoList() {
         }
     };
 
-
-    
-    const toggleDone = (id) => {
-        setTodos(todos.map(todo =>
-            todo.id === id ? { ...todo, done: !todo.done } : todo
-        ));
+    const handleEdit = (todo) => {
+        setEditId(todo.id);
+        setEditTask(todo.text);
+        setEditDueDate(todo.dueDate || '');
     };
 
-
-    const handleEdit = (id, newTask) => {
-        setTodos(todos.map(todo =>
-            todo.id === id ? { ...todo, text: newTask } : todo
-    ));
+    const handleCancel = () => {
+        setEditId('');
+        setEditTask('');
+        setEditDueDate('');
     };
+
+    const handleSave = async (id) => {
+        if (!editTask.trim()) 
+            return;
+
+        const selectedTodo = todos.find(todo => todo.id === id);
+
+        try {
+            let res = await axios.put(`${API_URL}/todos/${id}`, { ...selectedTodo, text: editTask.trim(), dueDate: editDueDate });
+            setTodos(todos.map(t => t.id === id ? res.data : t));         
+            handleCancel();  
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const toggleComplete = async (id) => {
+        const selectedTodo = todos.find(todo => todo.id === id);
+
+        try {
+            let res = await axios.put(`${API_URL}/todos/${id}`, { ...selectedTodo, completed: !selectedTodo.completed });
+            setTodos(todos.map(todo => todo.id === id ? res.data : todo));   
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     return(
         <>
@@ -96,9 +119,16 @@ export default function TodoList() {
                     <TodoItem
                         key={todo.id}
                         todo={todo}
-                        onToggleDone={toggleDone}
+                        isEditing={editId === todo.id}
+                        editTask={editTask}
+                        setEditTask={setEditTask}
+                        editDueDate={editDueDate}
+                        setEditDueDate={setEditDueDate}
                         onDelete={handleDelete}
                         onEdit={handleEdit}
+                        onSave={handleSave}
+                        onCancel={handleCancel}
+                        onToggleComplete={toggleComplete}
                     />
                     ))}
                 </ul>
