@@ -30,6 +30,7 @@ export default function NewItem({ setTodos }) {
             <input 
                 id="new-item" 
                 type="text" 
+                data-testid="new-item-text"  
                 placeholder="Add a new task here" 
                 value={newText}
                 onChange={e => setNewText(e.target.value)}
