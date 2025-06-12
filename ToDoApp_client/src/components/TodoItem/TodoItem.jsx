@@ -56,6 +56,7 @@ export default function TodoItem({ todo, setTodos }) {
         <div className="todo-item" data-testid="todo-item">
             <input
                 type="checkbox"
+                data-testid="todo-item-checkbox"
                 checked={todo.completed}
                 onChange={e => toggleComplete(e.target.checked)}
             />
@@ -64,12 +65,14 @@ export default function TodoItem({ todo, setTodos }) {
                 <>
                     <input
                         type="text"
+                        data-testid="todo-item-editText"
                         value={editText}
                         onChange={e => setEditText(e.target.value)}
                         className="todo-item__text"
                     />
                     <input
                         type="date"
+                        data-testid="todo-item-editDueDate"
                         value={editDueDate}
                         onChange={e => setEditDueDate(e.target.value)}
                     />
