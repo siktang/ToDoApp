@@ -6,7 +6,7 @@ import { faPen, faTrash, faFloppyDisk, faXmark } from "@fortawesome/free-solid-s
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; 
 
-export default function TodoItem({ todo, todos, setTodos }) {
+export default function TodoItem({ todo, setTodos }) {
 
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState("");
@@ -15,7 +15,7 @@ export default function TodoItem({ todo, todos, setTodos }) {
     const handleDelete = async () => {
         try {
             await axios.delete(`${API_URL}/todos/${todo.id}`);
-            setTodos(todos.filter(t => t.id !== todo.id));           
+            setTodos((prev) => prev.filter(t => t.id !== todo.id));
         } catch (error) {
             console.log(error);
         }
@@ -29,8 +29,8 @@ export default function TodoItem({ todo, todos, setTodos }) {
     
     const handleSave = async () => {
         try {
-            let res = await axios.put(`${API_URL}/todos/${todo.id}`, { ...todo, text: editText.trim(), dueDate: editDueDate });            
-            setTodos(todos.map(t => t.id === todo.id ? res.data : t)); 
+            let res = await axios.put(`${API_URL}/todos/${todo.id}`, { ...todo, text: editText.trim(), dueDate: editDueDate }); 
+            setTodos((prev) => prev.map(t => t.id === todo.id ? res.data : t));
 
             setIsEditing(false);
         } catch (error) {
@@ -45,7 +45,7 @@ export default function TodoItem({ todo, todos, setTodos }) {
     const toggleComplete = async (completed) => {
         try {
             let res = await axios.put(`${API_URL}/todos/${todo.id}`, { ...todo, completed: completed });
-            setTodos(todos.map(t => t.id === todo.id ? res.data : t)); 
+            setTodos((prev) => prev.map(t => t.id === todo.id ? res.data : t));
 
         } catch (error) {
             console.log(error);

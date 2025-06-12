@@ -25,8 +25,7 @@ export default function HomePage() {
 
     return (
         <main>
-            <NewItem 
-                todos={todos}
+            <NewItem
                 setTodos={setTodos}
             />
             

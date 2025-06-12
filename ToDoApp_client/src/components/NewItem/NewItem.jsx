@@ -7,7 +7,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; 
 
-export default function NewItem({ todos, setTodos }) {
+export default function NewItem({ setTodos }) {
 
     const [newText, setNewText] = useState("");
     const [newDueDate, setNewDueDate] = useState("");
@@ -15,7 +15,7 @@ export default function NewItem({ todos, setTodos }) {
     const handleAdd = async () => {
         try {
             let res = await axios.post(`${API_URL}/todos`, { text: newText.trim(), dueDate: newDueDate });            
-            setTodos([...todos, res.data]);
+            setTodos((prev) => [...prev, res.data]);
             
             setNewText("");
             setNewDueDate("");           
