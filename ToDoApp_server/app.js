@@ -15,6 +15,4 @@ app.get("/", (_req, res) => {
     res.send("Welcome to Todo App");
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on PORT ${PORT}`);
-});
+export default app;
