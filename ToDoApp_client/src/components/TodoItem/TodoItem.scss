@@ -1,0 +1,29 @@
+@use "../../styles/partials/globals";
+@use "../../styles/partials/typography";
+@use "../../styles/partials/variables" as *;
+
+
+.todo-item {
+    border: 0.25rem outset rgb(181 206 206);
+    padding: 0.5rem;
+
+    &__container {
+        display: flex;
+        justify-content: end;
+    }
+
+    &__text {
+        margin-right: 1rem;
+    }
+
+    &__done {
+    text-decoration: line-through;
+    color: #ada9a9;
+    }
+
+    &:hover {
+        background-color: rgb(223, 221, 225);
+    }
+}
+
+
