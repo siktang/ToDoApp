@@ -2,9 +2,9 @@ import "./TodoItem.scss";
 import { useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash, faFloppyDisk, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash, faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'; 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; 
 
 export default function TodoItem({ todo, todos, setTodos }) {
 
@@ -53,7 +53,7 @@ export default function TodoItem({ todo, todos, setTodos }) {
     };
 
     return(
-        <div className="todo-item">
+        <div className="todo-item" data-testid="todo-item">
             <input
                 type="checkbox"
                 checked={todo.completed}

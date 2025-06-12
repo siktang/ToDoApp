@@ -2,7 +2,7 @@ import "./NewItem.scss";
 import { useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; 
@@ -10,7 +10,7 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 export default function NewItem({ todos, setTodos }) {
 
     const [newText, setNewText] = useState("");
-    const [newDueDate, setNewDueDate] = useState('');
+    const [newDueDate, setNewDueDate] = useState("");
 
     const handleAdd = async () => {
         try {
@@ -25,7 +25,7 @@ export default function NewItem({ todos, setTodos }) {
     };
 
     return (
-        <section className="new-item">
+        <section className="new-item" data-testid="new-item">
             <label htmlFor="new-item"> New Task: </label>
             <input 
                 id="new-item" 
