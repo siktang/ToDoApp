@@ -1,13 +1,13 @@
-import { describe, it, beforeAll, afterAll, expect } from 'vitest';
-import axios from 'axios';
-import app from '../../app.js';
+import { describe, it, beforeAll, afterAll, expect } from "vitest";
+import axios from "axios";
+import app from "../../app.js";
 
 const PORT = process.env.PORT || 8080;
 const API_URL = `http://localhost:${PORT}`;
 
 let server;
 
-describe('Todo routes', () => {
+describe("Todo routes", () => {
   beforeAll((done) => {
     server = app.listen(PORT, done);
   });
@@ -16,15 +16,15 @@ describe('Todo routes', () => {
     server.close(done);
   });
 
-  it('should return empty todo list', async () => {
+  it("should return empty todo list", async () => {
     const response = await axios.get(`${API_URL}/todos`);
     expect(response.status).toBe(200);
     expect(response.data.length).toEqual(0);
   });
 
-  it('should throw 400 error to add new todo with empty text', async () => {
-    const newText = '';
-    const newDueDate = '06/10/2025';
+  it("should throw 400 error to add new todo with empty text", async () => {
+    const newText = "";
+    const newDueDate = "06/10/2025";
     const reqBody = { text: newText, dueDate: newDueDate, completed: false};
 
     try {
@@ -38,9 +38,9 @@ describe('Todo routes', () => {
     }
   });
 
-  it('should add a new todo item', async () => {
-    const newText = 'New todo 1';
-    const newDueDate = '06/10/2025';
+  it("should add a new todo item", async () => {
+    const newText = "New todo 1";
+    const newDueDate = "06/10/2025";
     const reqBody = { text: newText, dueDate: newDueDate, completed: false};
 
     const response = await axios.post(`${API_URL}/todos`, reqBody);
@@ -48,16 +48,16 @@ describe('Todo routes', () => {
     expect(response.data).toMatchObject(reqBody);
   });
 
-  it('should return a list of only one item', async () => {
+  it("should return a list of only one item", async () => {
     const response = await axios.get(`${API_URL}/todos`);
     expect(response.status).toBe(200);
     expect(response.data.length).toBe(1);
   });
 
-  it('should throw 404 error to update non-existent todo item', async () => {
-    const nonExistentId = '12345';
-    const updateText = 'Edit todo 1';
-    const updateDueDate = '07/12/2025';
+  it("should throw 404 error to update non-existent todo item", async () => {
+    const nonExistentId = "12345";
+    const updateText = "Edit todo 1";
+    const updateDueDate = "07/12/2025";
     const updateCompleted = true;
     const reqBody = { text: updateText, dueDate: updateDueDate, completed: updateCompleted};
 
@@ -72,12 +72,12 @@ describe('Todo routes', () => {
     }
   });
 
-  it('should update todo item', async () => {
+  it("should update todo item", async () => {
     const response = await axios.get(`${API_URL}/todos`);
     const existingTodo = response.data[0];
     
-    const updateText = 'Edit todo 1';
-    const updateDueDate = '07/12/2025';
+    const updateText = "Edit todo 1";
+    const updateDueDate = "07/12/2025";
     const updateCompleted = true;
     const reqBody = { text: updateText, dueDate: updateDueDate, completed: updateCompleted};
 
@@ -86,8 +86,8 @@ describe('Todo routes', () => {
     expect(responseUpdate.data).toMatchObject(reqBody);
   });
 
-  it('should throw 404 to delete non-existent todo item', async () => {
-    const nonExistentId = '12345';
+  it("should throw 404 to delete non-existent todo item", async () => {
+    const nonExistentId = "12345";
     
     try {
       await axios.delete(`${API_URL}/todos/${nonExistentId}`);
@@ -100,7 +100,7 @@ describe('Todo routes', () => {
     }
   });
 
-  it('should delete todo item', async () => {
+  it("should delete todo item", async () => {
     const response = await axios.get(`${API_URL}/todos`);
     const existingTodo = response.data[0];
     
@@ -108,7 +108,7 @@ describe('Todo routes', () => {
     expect(responseUpdate.status).toBe(204);
   });
 
-  it('should return empty todo list', async () => {
+  it("should return empty todo list", async () => {
     const response = await axios.get(`${API_URL}/todos`);
     expect(response.status).toBe(200);
     expect(response.data.length).toEqual(0);

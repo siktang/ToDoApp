@@ -1,9 +1,9 @@
-import './App.scss';
+import "./App.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
-import HomePage from './pages/HomePage/HomePage';
-import PageNotFound from './pages/PageNotFound/PageNotFound';
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import HomePage from "./pages/HomePage/HomePage";
+import PageNotFound from "./pages/PageNotFound/PageNotFound";
 
 function App() {
   

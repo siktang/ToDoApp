@@ -1,5 +1,5 @@
 import express from "express";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();
 
@@ -7,7 +7,7 @@ const router = express.Router();
 let todos = []; 
 
 // Get all todos
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
     try {
         return res.status(200).json(todos);
     } catch (error) {
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 });
 
 // Create a new todo
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
     const { text, dueDate } = req.body;
 
     // make sure none of those fields the user sent was empty
@@ -46,7 +46,7 @@ router.post('/', (req, res) => {
 });
 
 // Update a todo
-router.put('/:id', (req, res) => {
+router.put("/:id", (req, res) => {
   const { id } = req.params;
   
   const { text, dueDate, completed } = req.body;
@@ -72,7 +72,7 @@ router.put('/:id', (req, res) => {
 });
 
 // Delete a todo
-router.delete('/:id', (req, res) => {
+router.delete("/:id", (req, res) => {
   const { id } = req.params;
   
   const todo = todos.find(t => t.id === id);
