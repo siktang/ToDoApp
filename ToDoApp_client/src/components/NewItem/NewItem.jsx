@@ -1,6 +1,9 @@
 import "./NewItem.scss";
 import { useState } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; 
 
@@ -10,9 +13,6 @@ export default function NewItem({ todos, setTodos }) {
     const [newDueDate, setNewDueDate] = useState('');
 
     const handleAdd = async () => {
-        if (!newText.trim()) 
-            return;
-
         try {
             let res = await axios.post(`${API_URL}/todos`, { text: newText.trim(), dueDate: newDueDate });            
             setTodos([...todos, res.data]);
@@ -40,7 +40,10 @@ export default function NewItem({ todos, setTodos }) {
                 value={newDueDate}
                 onChange={e => setNewDueDate(e.target.value)}
             />
-            <button onClick={handleAdd} className="button button__add">Add</button>
+            <button onClick={handleAdd} className="button button__add" disabled={!newText.trim()}>
+                <FontAwesomeIcon icon={faPlus} className="button__icon" />
+                Add
+            </button>
         </section>
     )
 }

@@ -1,6 +1,8 @@
 import "./TodoItem.scss";
 import { useState } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrash, faFloppyDisk, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'; 
 
@@ -26,13 +28,8 @@ export default function TodoItem({ todo, todos, setTodos }) {
     };
     
     const handleSave = async () => {
-        const editTextTrimmed = editText.trim();
-
-        if (!editTextTrimmed) 
-            return;
-
         try {
-            let res = await axios.put(`${API_URL}/todos/${todo.id}`, { ...todo, text: editTextTrimmed, dueDate: editDueDate });            
+            let res = await axios.put(`${API_URL}/todos/${todo.id}`, { ...todo, text: editText.trim(), dueDate: editDueDate });            
             setTodos(todos.map(t => t.id === todo.id ? res.data : t)); 
 
             setIsEditing(false);
@@ -69,24 +66,37 @@ export default function TodoItem({ todo, todos, setTodos }) {
                         type="text"
                         value={editText}
                         onChange={e => setEditText(e.target.value)}
+                        className="todo-item__text"
                     />
                     <input
                         type="date"
                         value={editDueDate}
                         onChange={e => setEditDueDate(e.target.value)}
                     />
-                    <button onClick={handleSave} className="button button__save">Save</button>
-                    <button onClick={handleCancel} className="button button__cancel">Cancel</button>
+                    <button onClick={handleSave} className="button button__save" disabled={!editText.trim()}>
+                        <FontAwesomeIcon icon={faFloppyDisk} className="button__icon" />
+                        Save
+                    </button>
+                    <button onClick={handleCancel} className="button button__cancel">
+                        <FontAwesomeIcon icon={faXmark} className="button__icon" />
+                        Cancel
+                    </button>
                 </>
             ) : (
                 <>
                     <span
-                        className={`task-text ${todo.completed ? "done" : ""}`}
+                        className={`todo-item__text ${todo.completed ? "todo-item__done" : ""}`}
                     >
                         {todo.text} (Due: {todo.dueDate || "N/A"})
                     </span>
-                    <button onClick={handleEdit} className="button button__edit">Edit</button>
-                    <button onClick={handleDelete} className="button button__delete">Delete</button>
+                    <button onClick={handleEdit} className="button button__edit">
+                        <FontAwesomeIcon icon={faPen} className="button__icon" />
+                        Edit
+                    </button>
+                    <button onClick={handleDelete} className="button button__delete">
+                        <FontAwesomeIcon icon={faTrash} className="button__icon" />
+                        Delete
+                    </button>
                 </>
             )}
 

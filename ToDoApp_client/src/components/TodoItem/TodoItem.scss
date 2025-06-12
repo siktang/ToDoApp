@@ -12,9 +12,19 @@
         display: flex;
         justify-content: end;
     }
-}
 
-.done {
+    &__text {
+        margin-right: 1rem;
+    }
+
+    &__done {
     text-decoration: line-through;
     color: #ada9a9;
+    }
+
+    &:hover {
+        background-color: rgb(195, 193, 199);
+    }
 }
+
+
